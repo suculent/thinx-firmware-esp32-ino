@@ -4,7 +4,7 @@ const fs = require('fs');
 
 console.log('starting');
 
-const inFile = 'WiFiManager.template.html';
+const inFile = 'EAVManager.template.html';
 const outFile = 'template.h';
 
 const defineRegEx = /<!-- ([A-Z_]+) -->/gm;

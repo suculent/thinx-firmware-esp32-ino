@@ -1,5 +1,5 @@
 /**************************************************************
-   WiFiManager is a library for the ESP8266/Arduino platform
+   EAVManager is a library for the ESP8266/Arduino platform
    (https://github.com/esp8266/Arduino) to enable easy
    configuration and reconfiguration of WiFi credentials using a Captive Portal
    inspired by:
@@ -10,9 +10,9 @@
    Licensed under MIT license
  **************************************************************/
 
-#include "WiFiManager.h"
+#include "EAVManager.h"
 
-WiFiManagerParameter::WiFiManagerParameter(const char *custom) {
+EAVManagerParameter::EAVManagerParameter(const char *custom) {
   _id = NULL;
   _placeholder = NULL;
   _length = 0;
@@ -21,15 +21,15 @@ WiFiManagerParameter::WiFiManagerParameter(const char *custom) {
   _customHTML = custom;
 }
 
-WiFiManagerParameter::WiFiManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length) {
+EAVManagerParameter::EAVManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length) {
   init(id, placeholder, defaultValue, length, "");
 }
 
-WiFiManagerParameter::WiFiManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length, const char *custom) {
+EAVManagerParameter::EAVManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length, const char *custom) {
   init(id, placeholder, defaultValue, length, custom);
 }
 
-void WiFiManagerParameter::init(const char *id, const char *placeholder, const char *defaultValue, int length, const char *custom) {
+void EAVManagerParameter::init(const char *id, const char *placeholder, const char *defaultValue, int length, const char *custom) {
   _id = id;
   _placeholder = placeholder;
   _length = length;
@@ -44,33 +44,33 @@ void WiFiManagerParameter::init(const char *id, const char *placeholder, const c
   _customHTML = custom;
 }
 
-const char* WiFiManagerParameter::getValue() {
+const char* EAVManagerParameter::getValue() {
   return _value;
 }
-const char* WiFiManagerParameter::getID() {
+const char* EAVManagerParameter::getID() {
   return _id;
 }
-const char* WiFiManagerParameter::getPlaceholder() {
+const char* EAVManagerParameter::getPlaceholder() {
   return _placeholder;
 }
-int WiFiManagerParameter::getValueLength() {
+int EAVManagerParameter::getValueLength() {
   return _length;
 }
-const char* WiFiManagerParameter::getCustomHTML() {
+const char* EAVManagerParameter::getCustomHTML() {
   return _customHTML;
 }
 
-WiFiManager::WiFiManager() {
+EAVManager::EAVManager() {
 }
 
-void WiFiManager::addParameter(WiFiManagerParameter *p) {
+void EAVManager::addParameter(EAVManagerParameter *p) {
   _params[_paramsCount] = p;
   _paramsCount++;
   DEBUG_WM("Adding parameter");
   DEBUG_WM(p->getID());
 }
 
-void WiFiManager::setupConfigPortal() {
+void EAVManager::setupConfigPortal() {
   dnsServer.reset(new DNSServer());
   server.reset(new ESP8266WebServer(80));
 
@@ -109,26 +109,26 @@ void WiFiManager::setupConfigPortal() {
   dnsServer->start(DNS_PORT, "*", WiFi.softAPIP());
 
   /* Setup web pages: root, wifi config pages, SO captive portal detectors and not found. */
-  server->on("/", std::bind(&WiFiManager::handleRoot, this));
-  server->on("/wifi", std::bind(&WiFiManager::handleWifi, this, true));
-  server->on("/0wifi", std::bind(&WiFiManager::handleWifi, this, false));
-  server->on("/wifisave", std::bind(&WiFiManager::handleWifiSave, this));
-  server->on("/i", std::bind(&WiFiManager::handleInfo, this));
-  server->on("/r", std::bind(&WiFiManager::handleReset, this));
-  //server->on("/generate_204", std::bind(&WiFiManager::handle204, this));  //Android/Chrome OS captive portal check.
-  server->on("/fwlink", std::bind(&WiFiManager::handleRoot, this));  //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
-  server->onNotFound (std::bind(&WiFiManager::handleNotFound, this));
+  server->on("/", std::bind(&EAVManager::handleRoot, this));
+  server->on("/wifi", std::bind(&EAVManager::handleWifi, this, true));
+  server->on("/0wifi", std::bind(&EAVManager::handleWifi, this, false));
+  server->on("/wifisave", std::bind(&EAVManager::handleWifiSave, this));
+  server->on("/i", std::bind(&EAVManager::handleInfo, this));
+  server->on("/r", std::bind(&EAVManager::handleReset, this));
+  //server->on("/generate_204", std::bind(&EAVManager::handle204, this));  //Android/Chrome OS captive portal check.
+  server->on("/fwlink", std::bind(&EAVManager::handleRoot, this));  //Microsoft captive portal. Maybe not needed. Might be handled by notFound handler.
+  server->onNotFound (std::bind(&EAVManager::handleNotFound, this));
   server->begin(); // Web server start
   DEBUG_WM(F("HTTP server started"));
 
 }
 
-boolean WiFiManager::autoConnect() {
+boolean EAVManager::autoConnect() {
   String ssid = "ESP" + String(ESP.getChipId());
   return autoConnect(ssid.c_str(), NULL);
 }
 
-boolean WiFiManager::autoConnect(char const *apName, char const *apPassword) {
+boolean EAVManager::autoConnect(char const *apName, char const *apPassword) {
   DEBUG_WM(F(""));
   DEBUG_WM(F("AutoConnect"));
 
@@ -149,12 +149,12 @@ boolean WiFiManager::autoConnect(char const *apName, char const *apPassword) {
   return startConfigPortal(apName, apPassword);
 }
 
-boolean WiFiManager::startConfigPortal() {
+boolean EAVManager::startConfigPortal() {
   String ssid = "ESP" + String(ESP.getChipId());
   return startConfigPortal(ssid.c_str(), NULL);
 }
 
-boolean  WiFiManager::startConfigPortal(char const *apName, char const *apPassword) {
+boolean  EAVManager::startConfigPortal(char const *apName, char const *apPassword) {
   //setup AP
   WiFi.mode(WIFI_AP_STA);
   DEBUG_WM("SET AP STA");
@@ -216,7 +216,7 @@ boolean  WiFiManager::startConfigPortal(char const *apName, char const *apPasswo
 }
 
 
-int WiFiManager::connectWifi(String ssid, String pass) {
+int EAVManager::connectWifi(String ssid, String pass) {
   DEBUG_WM(F("Connecting as wifi client..."));
 
   // check if we've got static_ip settings, if we do, use those.
@@ -227,7 +227,7 @@ int WiFiManager::connectWifi(String ssid, String pass) {
   }
   //fix for auto connect racing issue
   if (WiFi.status() == WL_CONNECTED) {
-    DEBUG_WM("Already connected. Bailing out.");
+    DEBUG_WM("Already connected.");
     return WL_CONNECTED;
   }
   //check if we have ssid and pass and force those, if not, try with last saved values
@@ -235,7 +235,7 @@ int WiFiManager::connectWifi(String ssid, String pass) {
     WiFi.begin(ssid.c_str(), pass.c_str());
   } else {
     if (WiFi.SSID()) {
-      DEBUG_WM("Using last saved values, should be faster");
+      DEBUG_WM("Using credentials stored to EEPROM");
       //trying to fix connection in progress hanging
       ETS_UART_INTR_DISABLE();
       wifi_station_disconnect();
@@ -259,7 +259,7 @@ int WiFiManager::connectWifi(String ssid, String pass) {
   return connRes;
 }
 
-uint8_t WiFiManager::waitForConnectResult() {
+uint8_t EAVManager::waitForConnectResult() {
   if (_connectTimeout == 0) {
     return WiFi.waitForConnectResult();
   } else {
@@ -282,13 +282,13 @@ uint8_t WiFiManager::waitForConnectResult() {
   }
 }
 
-void WiFiManager::startWPS() {
+void EAVManager::startWPS() {
   DEBUG_WM("START WPS");
   WiFi.beginWPSConfig();
   DEBUG_WM("END WPS");
 }
 /*
-  String WiFiManager::getSSID() {
+  String EAVManager::getSSID() {
   if (_ssid == "") {
     DEBUG_WM(F("Reading SSID"));
     _ssid = WiFi.SSID();
@@ -298,7 +298,7 @@ void WiFiManager::startWPS() {
   return _ssid;
   }
 
-  String WiFiManager::getPassword() {
+  String EAVManager::getPassword() {
   if (_pass == "") {
     DEBUG_WM(F("Reading Password"));
     _pass = WiFi.psk();
@@ -308,54 +308,54 @@ void WiFiManager::startWPS() {
   return _pass;
   }
 */
-String WiFiManager::getConfigPortalSSID() {
+String EAVManager::getConfigPortalSSID() {
   return _apName;
 }
 
-void WiFiManager::resetSettings() {
+void EAVManager::resetSettings() {
   DEBUG_WM(F("settings invalidated"));
   DEBUG_WM(F("THIS MAY CAUSE AP NOT TO START UP PROPERLY. YOU NEED TO COMMENT IT OUT AFTER ERASING THE DATA."));
   WiFi.disconnect(true);
   //delay(200);
 }
-void WiFiManager::setTimeout(unsigned long seconds) {
+void EAVManager::setTimeout(unsigned long seconds) {
   setConfigPortalTimeout(seconds);
 }
 
-void WiFiManager::setConfigPortalTimeout(unsigned long seconds) {
+void EAVManager::setConfigPortalTimeout(unsigned long seconds) {
   _configPortalTimeout = seconds * 1000;
 }
 
-void WiFiManager::setConnectTimeout(unsigned long seconds) {
+void EAVManager::setConnectTimeout(unsigned long seconds) {
   _connectTimeout = seconds * 1000;
 }
 
-void WiFiManager::setDebugOutput(boolean debug) {
+void EAVManager::setDebugOutput(boolean debug) {
   _debug = debug;
 }
 
-void WiFiManager::setAPStaticIPConfig(IPAddress ip, IPAddress gw, IPAddress sn) {
+void EAVManager::setAPStaticIPConfig(IPAddress ip, IPAddress gw, IPAddress sn) {
   _ap_static_ip = ip;
   _ap_static_gw = gw;
   _ap_static_sn = sn;
 }
 
-void WiFiManager::setSTAStaticIPConfig(IPAddress ip, IPAddress gw, IPAddress sn) {
+void EAVManager::setSTAStaticIPConfig(IPAddress ip, IPAddress gw, IPAddress sn) {
   _sta_static_ip = ip;
   _sta_static_gw = gw;
   _sta_static_sn = sn;
 }
 
-void WiFiManager::setMinimumSignalQuality(int quality) {
+void EAVManager::setMinimumSignalQuality(int quality) {
   _minimumQuality = quality;
 }
 
-void WiFiManager::setBreakAfterConfig(boolean shouldBreak) {
+void EAVManager::setBreakAfterConfig(boolean shouldBreak) {
   _shouldBreakAfterConfig = shouldBreak;
 }
 
 /** Handle root or redirect to captive portal */
-void WiFiManager::handleRoot() {
+void EAVManager::handleRoot() {
   DEBUG_WM(F("Handle root"));
   if (captivePortal()) { // If caprive portal redirect instead of displaying the page.
     return;
@@ -370,20 +370,19 @@ void WiFiManager::handleRoot() {
   page += "<h1>";
   page += _apName;
   page += "</h1>";
-  page += F("<h3>WiFiManager</h3>");
+  page += F("<h3>EAVManager</h3>");
   page += FPSTR(HTTP_PORTAL_OPTIONS);
   page += FPSTR(HTTP_END);
-    
-    server->sendHeader("Content-Length", String(page.length()));
+
   server->send(200, "text/html", page);
 
 }
 
 /** Wifi config page handler */
-void WiFiManager::handleWifi(boolean scan) {
+void EAVManager::handleWifi(boolean scan) {
 
   String page = FPSTR(HTTP_HEAD);
-  page.replace("{v}", "Config ESP");
+  page.replace("{v}", "Config EAV");
   page += FPSTR(HTTP_SCRIPT);
   page += FPSTR(HTTP_STYLE);
   page += _customHeadElement;
@@ -528,7 +527,6 @@ void WiFiManager::handleWifi(boolean scan) {
 
   page += FPSTR(HTTP_END);
 
-        server->sendHeader("Content-Length", String(page.length()));
   server->send(200, "text/html", page);
 
 
@@ -536,7 +534,7 @@ void WiFiManager::handleWifi(boolean scan) {
 }
 
 /** Handle the WLAN save form and redirect to WLAN config page again */
-void WiFiManager::handleWifiSave() {
+void EAVManager::handleWifiSave() {
   DEBUG_WM(F("WiFi save"));
 
   //SAVE/connect here
@@ -586,7 +584,6 @@ void WiFiManager::handleWifiSave() {
   page += FPSTR(HTTP_SAVED);
   page += FPSTR(HTTP_END);
 
-    server->sendHeader("Content-Length", String(page.length()));
   server->send(200, "text/html", page);
 
   DEBUG_WM(F("Sent wifi save page"));
@@ -595,7 +592,7 @@ void WiFiManager::handleWifiSave() {
 }
 
 /** Handle the info page */
-void WiFiManager::handleInfo() {
+void EAVManager::handleInfo() {
   DEBUG_WM(F("Info"));
 
   String page = FPSTR(HTTP_HEAD);
@@ -629,14 +626,13 @@ void WiFiManager::handleInfo() {
   page += F("</dl>");
   page += FPSTR(HTTP_END);
 
-    server->sendHeader("Content-Length", String(page.length()));
   server->send(200, "text/html", page);
 
   DEBUG_WM(F("Sent info page"));
 }
 
 /** Handle the reset page */
-void WiFiManager::handleReset() {
+void EAVManager::handleReset() {
   DEBUG_WM(F("Reset"));
 
   String page = FPSTR(HTTP_HEAD);
@@ -647,7 +643,6 @@ void WiFiManager::handleReset() {
   page += FPSTR(HTTP_HEAD_END);
   page += F("Module will reset in a few seconds.");
   page += FPSTR(HTTP_END);
-    server->sendHeader("Content-Length", String(page.length()));
   server->send(200, "text/html", page);
 
   DEBUG_WM(F("Sent reset page"));
@@ -656,18 +651,7 @@ void WiFiManager::handleReset() {
   delay(2000);
 }
 
-
-
-//removed as mentioned here https://github.com/tzapu/WiFiManager/issues/114
-/*void WiFiManager::handle204() {
-  DEBUG_WM(F("204 No Response"));
-  server->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-  server->sendHeader("Pragma", "no-cache");
-  server->sendHeader("Expires", "-1");
-  server->send ( 204, "text/plain", "");
-}*/
-
-void WiFiManager::handleNotFound() {
+void EAVManager::handleNotFound() {
   if (captivePortal()) { // If captive portal redirect instead of displaying the error page.
     return;
   }
@@ -686,13 +670,12 @@ void WiFiManager::handleNotFound() {
   server->sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   server->sendHeader("Pragma", "no-cache");
   server->sendHeader("Expires", "-1");
-    server->sendHeader("Content-Length", String(message.length()));
   server->send ( 404, "text/plain", message );
 }
 
 
 /** Redirect to captive portal if we got a request for another domain. Return true in that case so the page handler do not try to handle the request again. */
-boolean WiFiManager::captivePortal() {
+boolean EAVManager::captivePortal() {
   if (!isIp(server->hostHeader()) ) {
     DEBUG_WM(F("Request redirected to captive portal"));
     server->sendHeader("Location", String("http://") + toStringIp(server->client().localIP()), true);
@@ -704,36 +687,36 @@ boolean WiFiManager::captivePortal() {
 }
 
 //start up config portal callback
-void WiFiManager::setAPCallback( void (*func)(WiFiManager* myWiFiManager) ) {
+void EAVManager::setAPCallback( void (*func)(EAVManager* myEAVManager) ) {
   _apcallback = func;
 }
 
 //start up save config callback
-void WiFiManager::setSaveConfigCallback( void (*func)(void) ) {
+void EAVManager::setSaveConfigCallback( void (*func)(void) ) {
   _savecallback = func;
 }
 
 //sets a custom element to add to head, like a new style tag
-void WiFiManager::setCustomHeadElement(const char* element) {
+void EAVManager::setCustomHeadElement(const char* element) {
   _customHeadElement = element;
 }
 
 //if this is true, remove duplicated Access Points - defaut true
-void WiFiManager::setRemoveDuplicateAPs(boolean removeDuplicates) {
+void EAVManager::setRemoveDuplicateAPs(boolean removeDuplicates) {
   _removeDuplicateAPs = removeDuplicates;
 }
 
 
 
 template <typename Generic>
-void WiFiManager::DEBUG_WM(Generic text) {
+void EAVManager::DEBUG_WM(Generic text) {
   if (_debug) {
-    Serial.print("*WM: ");
+    Serial.print("EAVWM: ");
     Serial.println(text);
   }
 }
 
-int WiFiManager::getRSSIasQuality(int RSSI) {
+int EAVManager::getRSSIasQuality(int RSSI) {
   int quality = 0;
 
   if (RSSI <= -100) {
@@ -747,7 +730,7 @@ int WiFiManager::getRSSIasQuality(int RSSI) {
 }
 
 /** Is this an IP? */
-boolean WiFiManager::isIp(String str) {
+boolean EAVManager::isIp(String str) {
   for (int i = 0; i < str.length(); i++) {
     int c = str.charAt(i);
     if (c != '.' && (c < '0' || c > '9')) {
@@ -758,7 +741,7 @@ boolean WiFiManager::isIp(String str) {
 }
 
 /** IP to String? */
-String WiFiManager::toStringIp(IPAddress ip) {
+String EAVManager::toStringIp(IPAddress ip) {
   String res = "";
   for (int i = 0; i < 3; i++) {
     res += String((ip >> (8 * i)) & 0xFF) + ".";

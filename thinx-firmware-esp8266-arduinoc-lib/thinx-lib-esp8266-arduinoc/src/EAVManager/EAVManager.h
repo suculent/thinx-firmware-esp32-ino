@@ -1,5 +1,5 @@
 /**************************************************************
-   WiFiManager is a library for the ESP8266/Arduino platform
+   EAVManager is a library for the ESP8266/Arduino platform
    (https://github.com/esp8266/Arduino) to enable easy
    configuration and reconfiguration of WiFi credentials using a Captive Portal
    inspired by:
@@ -10,8 +10,8 @@
    Licensed under MIT license
  **************************************************************/
 
-#ifndef WiFiManager_h
-#define WiFiManager_h
+#ifndef EAVManager_h
+#define EAVManager_h
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -37,11 +37,11 @@ const char HTTP_END[] PROGMEM             = "</div></body></html>";
 
 #define WIFI_MANAGER_MAX_PARAMS 10
 
-class WiFiManagerParameter {
+class EAVManagerParameter {
   public:
-    WiFiManagerParameter(const char *custom);
-    WiFiManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length);
-    WiFiManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length, const char *custom);
+    EAVManagerParameter(const char *custom);
+    EAVManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length);
+    EAVManagerParameter(const char *id, const char *placeholder, const char *defaultValue, int length, const char *custom);
 
     const char *getID();
     const char *getValue();
@@ -57,14 +57,14 @@ class WiFiManagerParameter {
 
     void init(const char *id, const char *placeholder, const char *defaultValue, int length, const char *custom);
 
-    friend class WiFiManager;
+    friend class EAVManager;
 };
 
 
-class WiFiManager
+class EAVManager
 {
   public:
-    WiFiManager();
+    EAVManager();
 
     boolean       autoConnect();
     boolean       autoConnect(char const *apName, char const *apPassword = NULL);
@@ -96,11 +96,11 @@ class WiFiManager
     //sets config for a static IP
     void          setSTAStaticIPConfig(IPAddress ip, IPAddress gw, IPAddress sn);
     //called when AP mode and config portal is started
-    void          setAPCallback( void (*func)(WiFiManager*) );
+    void          setAPCallback( void (*func)(EAVManager*) );
     //called when settings have been changed and connection was successful
     void          setSaveConfigCallback( void (*func)(void) );
     //adds a custom parameter
-    void          addParameter(WiFiManagerParameter *p);
+    void          addParameter(EAVManagerParameter *p);
     //if this is set, it will exit after config, even if connection is unsucessful.
     void          setBreakAfterConfig(boolean shouldBreak);
     //if this is set, try WPS setup when starting (this will delay config portal for up to 2 mins)
@@ -109,6 +109,8 @@ class WiFiManager
     void          setCustomHeadElement(const char* element);
     //if this is true, remove duplicated Access Points - defaut true
     void          setRemoveDuplicateAPs(boolean removeDuplicates);
+
+    int           connectWifi(String ssid, String pass);
 
   private:
     std::unique_ptr<DNSServer>        dnsServer;
@@ -149,7 +151,6 @@ class WiFiManager
     //void          setEEPROMString(int start, int len, String string);
 
     int           status = WL_IDLE_STATUS;
-    int           connectWifi(String ssid, String pass);
     uint8_t       waitForConnectResult();
 
     void          handleRoot();
@@ -172,10 +173,10 @@ class WiFiManager
     boolean       connect;
     boolean       _debug = true;
 
-    void (*_apcallback)(WiFiManager*) = NULL;
+    void (*_apcallback)(EAVManager*) = NULL;
     void (*_savecallback)(void) = NULL;
 
-    WiFiManagerParameter* _params[WIFI_MANAGER_MAX_PARAMS];
+    EAVManagerParameter* _params[WIFI_MANAGER_MAX_PARAMS];
 
     template <typename Generic>
     void          DEBUG_WM(Generic text);

@@ -1,13 +1,13 @@
 #######################################
-# Syntax Coloring Map For WifiManager
+# Syntax Coloring Map For EAVManager
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-WiFiManager	KEYWORD1
-WiFiManagerParameter KEYWORD1
+EAVManager	KEYWORD1
+EAVManagerParameter KEYWORD1
 
 
 #######################################
