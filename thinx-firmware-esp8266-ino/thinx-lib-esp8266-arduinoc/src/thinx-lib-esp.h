@@ -1,34 +1,19 @@
 #include <Arduino.h>
+
 #define __DEBUG__
 #define __DEBUG_JSON__
 
-#define __USE_WIFI_MANAGER__
-
 #include <stdio.h>
-#include <Arduino.h>
 #include "ArduinoJson/ArduinoJson.h"
 
-#include "FS.h"
 
-// Inject SSID and Password from 'Settings.h' for testing where we do not use EAVManager
-#ifndef __USE_WIFI_MANAGER__
-#include "Settings.h"
-#else
-// Custom clone of EAVManager (we shall revert back to OpenSource if this won't be needed)
-// Purpose: SSID/password injection in AP mode
-// Solution: re-implement from UDP in mobile application
-//
-// Changes so far: `int connectWifi()` moved to public section in header
-// - buildable, but requires UDP end-to-end)
+#include <FS.h>
 #include "EAVManager/EAVManager.h"
 #include <EAVManager.h>
-#endif
 
 // Using better than Arduino-bundled version of MQTT https://github.com/Imroy/pubsubclient
 #include "PubSubClient/PubSubClient.h" // Local checkout
 //#include <PubSubClient.h> // Arduino Library
-
-// WORK IN PROGRESS: Send a registration post request with current MAC, Firmware descriptor, commit ID; sha and version if known (with all other useful params like expected device owner).
 
 // TODO: Add UDP AT&U= responder like in EAV? Considered unsafe. Device will notify available update and download/install it on its own (possibly throught THiNX Security Gateway (THiNX )
 // IN PROGRESS: Add MQTT client (target IP defined using Thinx.h) and forced firmware update responder (will update on force or save in-memory state from new or retained mqtt notification)
@@ -61,17 +46,22 @@ class THiNX {
     EAVManagerParameter *api_key_param;
 
     // THiNX Client
-    String thinx_alias;
-    String thinx_owner;
-    String thinx_api_key;
-
-    String thinx_udid;
+    // Import build-time values from thinx.h
     String thinx_commit_id;
+    String thinx_mqtt_url;
+    String thinx_cloud_url;
     String thinx_firmware_version;
     String thinx_firmware_version_short;
-    String thinx_cloud_url;
-    String thinx_mqtt_url;
+    String app_version;
+
     int thinx_mqtt_port;
+    int thinx_api_port;
+
+    // dynamic variables
+    String thinx_alias;
+    String thinx_owner;
+    String thinx_udid;
+    String thinx_api_key;
 
     // MQTT
 
@@ -126,6 +116,7 @@ class THiNX {
     }
 
     String thinx_mqtt_channel();
+    String thinx_mqtt_status_channel();
 
     private:
 
@@ -136,13 +127,15 @@ class THiNX {
       int status;                 // global WiFi status
       bool once;
       bool connected;
-      void configModeCallback(EAVManager*);
+      //void configModeCallback(EAVManager*);
       void saveConfigCallback();
 
       // THiNX API
       char thx_api_key[64];     // new firmware requires 64 bytes
       char thx_udid[64];        // new firmware requires 64 bytes
+
       StaticJsonBuffer<1024> jsonBuffer;
+      StaticJsonBuffer<2048> wrapperBuffer;
 
       void checkin();
       void senddata(String);
@@ -152,7 +145,8 @@ class THiNX {
 
       // MQTT
       int last_mqtt_reconnect;
-      void start_mqtt();
+      bool start_mqtt();
+      bool mqtt_result;
 
       String thinx_mqtt_shared_channel();
       String thinx_mac();
