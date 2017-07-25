@@ -14,6 +14,6 @@
 #define THINX_MQTT_PORT 1883
 #define THINX_MQTT_URL "rtm.thinx.cloud"
 #define THINX_OWNER "cedc16bb6bb06daaa3ff6d30666d91aacd6e3efbf9abbc151b4dcade59af7c12"
-#define THINX_PLATFORM "platformio"
+#define THINX_PLATFORM "%%THINX_PLATFORM%%"
 #define THINX_PROXY "thinx.local"
 #define THINX_UDID "f8e88e40-43c8-11e7-9ad3-b7281c2b9610"
