@@ -16,7 +16,7 @@ void setup() {
   Serial.setDebugOutput(true);
 #endif
 
-  thx = new THiNX(thinx_api_key);
+  thx = new THiNX(THINX_API_KEY); // should not be used when empty string with fallback to captive portal
 }
 
 void loop()
