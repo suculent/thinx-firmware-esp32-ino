@@ -3,13 +3,8 @@
 #include "Arduino.h"
 #include <THiNXLib.h>
 
-#define __DEBUG_WIFI__ /* use as fallback when device gets stucked with incorrect WiFi configuration, overwrites Flash in ESP */
-#ifdef __DEBUG_WIFI__
-#include "Settings.h" /* inject WiFi SSID/password here for testing */
-#endif
-
 THiNX thx;
-const char* apikey = "71679ca646c63d234e957e37e4f4069bf4eed14afca4569a0c74abf503076732";
+const char* apikey = "71679ca646c63d234e957e37e4f4069bf4eed14afca4569a0c74abf503076732"; // required to checkin
 
 void setup() {
   Serial.begin(115200);
