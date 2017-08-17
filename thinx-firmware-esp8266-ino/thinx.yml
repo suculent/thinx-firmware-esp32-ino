@@ -1,0 +1,9 @@
+arduino:
+  platform: esp8266com
+  arch: esp8266
+  board: d1_mini  
+  libs:
+    - THiNX
+    - PubSubClient
+    - WiFiManager
+    - ArduinoJSON
