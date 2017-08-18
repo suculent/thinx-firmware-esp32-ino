@@ -12,7 +12,7 @@ echo
 # Use this before your own internal releases. Build server does it automatically.
 
 THINX_FILE=$(find . | grep "/thinx.h")
-THINX_OWNER="eaabae0d5165c5db4c46c3cb6f062938802f58d9b88a1b46ed69421809f0bf7f" # todo: override with parameter
+THINX_OWNER="cedc16bb6bb06daaa3ff6d30666d91aacd6e3efbf9abbc151b4dcade59af7c12" # todo: override with parameter
 THINX_ALIAS="vanilla" # todo: override with parameter
 THINX_CLOUD_URL="rtm.thinx.cloud" # IP causes crashes
 THINX_MQTT_URL="${THINX_CLOUD_URL}" # mqtt://?
