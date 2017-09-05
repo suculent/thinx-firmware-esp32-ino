@@ -10,7 +10,7 @@ Arduino firmware for THiNX, providing automatic device registration and OTA upda
 ### Arduino C development
 
 - Arduino IDE or Platform.io
-- Arduino libraries: ArduinoJSON, EAVManager, ESP8266httpUpdate (to be replaced)
+- Arduino libraries: THiNXLib 2.0.50 or newer; ArduinoJSON, EAVManager, ESP8266httpUpdate (to be replaced)
 - Open this folder using Atom with installed Platform.io or thinx-firmware-esp8266/thinx-firmware-esp8266.ino using Arduino IDE.
 - Run prerelease.sh to bake your commit ID into the Thinx.h file.
 
