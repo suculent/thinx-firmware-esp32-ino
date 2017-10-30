@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 echo "I don't know whether we should maintain this. It's built into server. Can be extracted as js."
@@ -20,7 +19,7 @@ THINX_MQTT_URL="${THINX_CLOUD_URL}" # mqtt://?
 REPO_NAME='thinx-firmware-esp8266'
 VERSION=$(git rev-list HEAD --count)
 REPO_VERSION="1.6.${VERSION}"
-BUILD_DATE=`date +%Y-%m-%d`
+BUILD_DATE=$(date +%Y-%m-%d)
 
 echo "//" > $THINX_FILE
 echo "// This is an auto-generated file, it will be re-written by THiNX on cloud build." >> $THINX_FILE
