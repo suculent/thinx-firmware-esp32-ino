@@ -1,5 +1,7 @@
 # thinx-firmware-esp8266-ino
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/656ce88b25864d8b87d5c41848364253)](https://www.codacy.com/app/suculent/thinx-firmware-esp8266-ino?utm_source=github.com&utm_medium=referral&utm_content=suculent/thinx-firmware-esp8266-ino&utm_campaign=badger)
+
 Arduino firmware for THiNX, providing automatic device registration and OTA updates.
 
 * This is a work in progress.
