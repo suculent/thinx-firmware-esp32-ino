@@ -13,9 +13,9 @@ Arduino firmware for THiNX, providing automatic device registration and OTA upda
 
 > WARNING! Arduino Library Manager is supported through the thinx.yml file, however this library already contains all required dependencies, because your local Arduino Libraries are not located on the CI server. 
 
-> Install dependencies from the `lib` folder to your Arduino libraries to compile locally.
+> Copy dependencies from the `lib` folder to your Arduino libraries to compile locally.
 
-> Use the thinx.yml to add dependencies for THiNX CI, but be aware that libraries from lib folder next to .ino file will be copied to build-server's Arduino Library Manager folder.
+> Use the thinx.yml to add more dependencies for THiNX CI, but be aware that those will be merged with libraries from lib folder next to .ino file.
 
 - Arduino IDE or Platform.io
 - Arduino libraries: THiNXLib 2.0.99 or newer; ArduinoJSON, WiFiManager, ESP8266httpUpdate (to be replaced)
