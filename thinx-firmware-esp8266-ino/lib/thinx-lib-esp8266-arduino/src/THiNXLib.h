@@ -19,10 +19,10 @@
 #include <ESP8266HTTPClient.h>
 #include <ESP8266httpUpdate.h>
 
-#include <ArduinoJson.h>
+#include "ArduinoJson/ArduinoJson.h"
 
 // Using better than Arduino-bundled version of MQTT https://github.com/Imroy/pubsubclient
-#include <PubSubClient.h>
+#include "PubSubClient/PubSubClient.h" // Local checkout
 
 #ifndef THX_REVISION
   #ifdef THINX_FIRMWARE_VERSION_SHORT
@@ -134,7 +134,7 @@ class THiNX {
         const char* firmware_version_short = THINX_FIRMWARE_VERSION_SHORT;
       #else
       #ifdef THX_REVISION
-        const char* firmware_version_short = strdup(String(THX_REVISION).c_str()); // "90"; //
+        const char* firmware_version_short = strdup(String(THX_REVISION).c_str()); 
       #else
         const char* firmware_version_short = "90";
       #endif

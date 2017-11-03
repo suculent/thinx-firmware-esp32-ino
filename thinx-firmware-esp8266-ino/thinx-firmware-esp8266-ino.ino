@@ -2,7 +2,7 @@
 
 #define ARDUINO_IDE
 
-#include "THiNXLib.h"
+#include <THiNXLib.h>
 
 THiNX thx;
 
