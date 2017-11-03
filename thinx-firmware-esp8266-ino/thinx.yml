@@ -4,7 +4,5 @@ arduino:
   board: d1_mini
   flash_ld: eagle.flash.4m1m.ld
   libs:
-    - THiNX
-    - PubSubClient
-    - WiFiManager
     - ArduinoJSON
+    - WiFiManager
