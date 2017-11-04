@@ -2,16 +2,23 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/656ce88b25864d8b87d5c41848364253)](https://www.codacy.com/app/suculent/thinx-firmware-esp8266-ino?utm_source=github.com&utm_medium=referral&utm_content=suculent/thinx-firmware-esp8266-ino&utm_campaign=badger)
 
-Arduino firmware for THiNX, providing automatic device registration and OTA updates.
+Arduino firmware for THiNX providing device management and automatic (webhook-based) OTA (over-the-air) firmware builds and updates.
+
+Provides example implementations for ESP8266 with Arduino IDE.
 
 * This is a work in progress.
-* 100% functionality is not yet guaranteed.
+* 100% functionality is not guaranteed for all the time.
 
 # Requirements
 
+
+### IDE
+
+- Arduino IDE (currently tested with 1.8.5 but works even with older versions)
+
 ### Arduino C development
 
-> WARNING! Arduino Library Manager is supported through the thinx.yml file, however this library already contains all required dependencies, because your local Arduino Libraries are not located on the CI server. 
+> WARNING! Adding Arduino Library Manager dependencies is supported through the thinx.yml file, however this library already contains all required dependencies, because your local Arduino Libraries are not located on the CI server. 
 
 > Copy dependencies from the `lib` folder to your Arduino libraries to compile locally.
 
@@ -22,9 +29,16 @@ Arduino firmware for THiNX, providing automatic device registration and OTA upda
 - Open this folder using Atom with installed Platform.io or thinx-firmware-esp8266/thinx-firmware-esp8266.ino using Arduino IDE.
 - Run prerelease.sh to bake your commit ID into the Thinx.h file.
 
-### Forced Update
+# Installation
 
-• Not yet implemented, will be possible in future. 
+## Arduino IDE
+
+Search for `THiNXLib` in Arduino Library Manager and install all other dependencies... or you can just copy then from the `lib` folder if you prefer tested versions before the latest.
+
+## Board support
+
+For properly configuring the `.board` file (preset to ESP8266/Wemos D1 Mini) see the [Arduino CLI Docs](https://github.com/arduino/Arduino/blob/master/build/shared/manpage.adoc) docs for the `-board package:arch:board[:parameters]` option.
+
 
 # Usage
 
@@ -41,10 +55,15 @@ Arduino firmware for THiNX, providing automatic device registration and OTA upda
 
 Note: In case you'll build/upload your project (e.g. the library) using thinx.cloud, API key will be injected automatically and you should not need to set it up anymore.
 
-# Board support
+# Environment Variable Support
 
-For properly configuring the `.board` file (preset to ESP8266/Wemos D1 Mini) see the [Arduino CLI Docs](https://github.com/arduino/Arduino/blob/master/build/shared/manpage.adoc) docs for the `-board package:arch:board[:parameters]` option.
+You provide callback receiving String using `setPushConfigCallback()` method. Whenever device receives MQTT update with `configuration` key, it will provide all environment variables to you.
+
+> This may be also used for the WiFi Migration procedure.
+
 
 # Security
 
-Because all the traffic from ESP8266 is usually HTTP-only and not all devices can handle SSL, you can install our side-kick project [THiNX-Connect](https://github.com/suculent/thinx-connect). Install this proxy to your home environment and it will encrypt HTTP traffic to HTTPS and will tunnell your device communication directly to thinx.cloud.
+Because all the traffic from ESP8266 is usually HTTP-only and not all devices can handle SSL, you can install our side-kick project [THiNX-Connect](https://github.com/suculent/thinx-connect). Install this proxy to your home environment and it will encrypt HTTP traffic to HTTPS and will tunnel your device communication directly to thinx.cloud.
+
+Library queries the `thinx` MDNS service on `_tcp` protocol on local network upon connection. When such service is available, library will forward all HTTP requests through this service. 
