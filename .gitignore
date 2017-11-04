@@ -50,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+thinx-firmware-esp8266-ino/settings.h
