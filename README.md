@@ -1,6 +1,6 @@
 # thinx-firmware-esp32-ino
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/656ce88b25864d8b87d5c41848364253)](https://www.codacy.com/app/suculent/thinx-firmware-esp32-ino?utm_source=github.com&utm_medium=referral&utm_content=suculent/thinx-firmware-esp32-ino&utm_campaign=badger)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/508a2d29378f487b9d67db536e373614)](https://www.codacy.com/app/suculent/thinx-firmware-esp32-ino?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=suculent/thinx-firmware-esp32-ino&amp;utm_campaign=Badge_Grade)
 
 Arduino firmware for THiNX providing device management and automatic (webhook-based) OTA (over-the-air) firmware builds and updates.
 
