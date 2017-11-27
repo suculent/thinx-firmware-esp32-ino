@@ -5,9 +5,6 @@
 
 
 // Import SSID, PASSWORD and API KEY from file not included in repository
-#ifndef THINXCI
-#import "settings.h"
-#else
 // Those are just dummy demo values. Never store those in public repository!
 // Save them to settings.h and use .gitigore to keep file on your machine only.
 // THiNX CI will be able to add the apikey and owner_id on its own. You can configure
@@ -18,7 +15,6 @@ const char *apikey = "";
 const char *owner_id = "";
 const char *ssid = "THiNX-IoT+";
 const char *pass = "<enter-your-ssid-password>";
-#endif
 
 THiNX thx;
 
