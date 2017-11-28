@@ -1,10 +1,8 @@
 arduino:
-  platform: esp8266com
-  arch: esp8266
-  board: d1_mini
-  flash_ld: eagle.flash.4m1m.ld
-  f_cpu: 80
-  flash_size: 1M
+  platform: espressif32
+  arch: esp32
+  board: ESP32_DEV
+  f_cpu: 240
+  flash_size: 4M
   libs:
     - ArduinoJSON
-    - WiFiManager
