@@ -1,3 +1,0 @@
-[submodule "thinx-esp32-example/lib/thinx-firmware-esp32"]
-	path = thinx-esp32-example/lib/thinx-firmware-esp32
-	url = git@github.com:suculent/thinx-firmware-esp32.git
