@@ -4,3 +4,6 @@
 [submodule "lib/PubSubClient"]
 	path = lib/PubSubClient
 	url = https://github.com/Imroy/pubsubclient.git
+[submodule "lib/thinx-firmware-esp32"]
+	path = lib/thinx-firmware-esp32
+	url = git@github.com:suculent/thinx-firmware-esp32.git
