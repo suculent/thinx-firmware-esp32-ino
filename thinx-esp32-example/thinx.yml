@@ -1,5 +1,5 @@
 arduino:
-  platform: espressif32
+  platform: esp32
   arch: esp32
   board: ESP32_DEV
   f_cpu: 240
